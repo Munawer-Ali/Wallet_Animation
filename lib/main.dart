@@ -7,27 +7,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
+   
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: const HomeScreen(),
@@ -106,7 +91,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     bool cardSwitched = false;
     _animation.addListener(() {
       final progress = _animation.value / -250.0;
-      print("progress : $progress");
       if (progress >= 0.9 && !cardSwitched) {
         setState(() {
           _showFirstCard = !_showFirstCard;
@@ -114,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           Future.delayed(const Duration(milliseconds: 200), () {
             setState(() {
               _showSecondCard = !_showSecondCard;
-      print("_showSecondCard  : $_showSecondCard");
             });
           });
         });
@@ -122,7 +105,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       
       if (progress < 0.5) {
         cardSwitched = false;
-      print("cardSwitched  : $cardSwitched");
       }
     });
   
@@ -213,8 +195,6 @@ Widget _buildAnimatedWallet(String image) {
       builder: (context, child) {
         final double currentOffset = _animation.isAnimating ? _animation.value : _dragOffset;
         final double ImageSize = (currentOffset / -150.0) * 0.2;
-        // print("currentOffset : $currentOffset");
-        // print("ImageSize : $ImageSize");
         return AnimatedBuilder(
                     animation: _walletAnimation,
                     builder: (context, child) {
@@ -524,14 +504,6 @@ class _AtmMachineState extends State<AtmMachine> with TickerProviderStateMixin {
         ).chain(CurveTween(curve: Curves.fastOutSlowIn)),
         weight: 20.0,
       ),
-
-      //   TweenSequenceItem(
-      //   tween: Tween<Offset>(
-      //     begin: const Offset(-60.0, -240.0),
-      //     end: const Offset(-60.0, -240.0),
-      //   ).chain(CurveTween(curve: Curves.fastOutSlowIn)),
-      //   weight: 70.0,
-      // ),
     ]).animate(_cardInsertController);
     
     Future.delayed(const Duration(milliseconds: 800), () async {
@@ -556,9 +528,6 @@ class _AtmMachineState extends State<AtmMachine> with TickerProviderStateMixin {
   }
 
   Future<void> _startCardInsertAnimation() async {
-    // if (_isCardInserting) return;
-    // _isReceiptVisible = !_isReceiptVisible;
-
     if(!_isCardInserted){
    setState(() {
       _isCardInserting = true;
@@ -572,40 +541,39 @@ class _AtmMachineState extends State<AtmMachine> with TickerProviderStateMixin {
        
     });
     }else{
-      print("_isCardInserted : $_isCardInserted");
-       AtmScreenTextChange("processing");
+        AtmScreenTextChange("processing");
 
 
-          Future.delayed(const Duration(milliseconds: 2500), () {
-           AtmScreenTextChange("success");
-          });
- 
+           Future.delayed(const Duration(milliseconds: 2500), () {
+            AtmScreenTextChange("success");
+           });
+  
 
-   Future.delayed(const Duration(milliseconds: 4500), () {
-           AtmScreenTextChange("receipt");
-      _isReceiptVisible = true;
-    setState(() {});
-    
+    Future.delayed(const Duration(milliseconds: 4500), () {
+            AtmScreenTextChange("receipt");
+       _isReceiptVisible = true;
+     setState(() {});
+      
     });
 
 
-   Future.delayed(const Duration(milliseconds: 7000), () {
-           AtmScreenTextChange("thankYou");
+    Future.delayed(const Duration(milliseconds: 7000), () {
+            AtmScreenTextChange("thankYou");
+     });
+
+    Future.delayed(const Duration(milliseconds: 9000), () {
+   _atmController.reverse();
+   setState(() {
+   });
     });
 
-   Future.delayed(const Duration(milliseconds: 9000), () {
-  _atmController.reverse();
-  setState(() {
-  });
-   });
-
-   Future.delayed(const Duration(milliseconds: 9500), () {
-    Navigator.of(context).push(
-      CustomPageRoute(
-        child: const ReceiptScreen(),
-      ),
-    );
-   });
+    Future.delayed(const Duration(milliseconds: 9500), () {
+     Navigator.of(context).push(
+       CustomPageRoute(
+         child: const ReceiptScreen(),
+       ),
+     );
+    });
 
     }
 
